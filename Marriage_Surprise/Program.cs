@@ -1,22 +1,35 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 const string AdminDeleteEmail = "bandihemanth2602@gmail.com";
 var renderPort = Environment.GetEnvironmentVariable("PORT");
+var configuredDatabase = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddOpenApi();
-var dbPath = builder.Environment.IsDevelopment()
-    ? "wedding.db"
-    : "/data/wedding.db";
 
-if (!builder.Environment.IsDevelopment())
+if (!string.IsNullOrWhiteSpace(configuredDatabase))
 {
-    Directory.CreateDirectory("/data");
+    var postgresConnectionString = BuildPostgresConnectionString(configuredDatabase);
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(postgresConnectionString));
 }
+else
+{
+    var dbPath = builder.Environment.IsDevelopment()
+        ? "wedding.db"
+        : "/data/wedding.db";
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite($"Data Source={dbPath}"));
+    if (!builder.Environment.IsDevelopment())
+    {
+        Directory.CreateDirectory("/data");
+    }
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite($"Data Source={dbPath}"));
+}
 
 var app = builder.Build();
 
@@ -194,6 +207,42 @@ app.MapPost("/api/live/memories", async (HttpRequest request, AppDbContext db) =
 });
 
 app.Run();
+
+static string BuildPostgresConnectionString(string configuredDatabase)
+{
+    if (!Uri.TryCreate(configuredDatabase, UriKind.Absolute, out var databaseUri) ||
+        !(databaseUri.Scheme.Equals("postgres", StringComparison.OrdinalIgnoreCase) ||
+          databaseUri.Scheme.Equals("postgresql", StringComparison.OrdinalIgnoreCase)))
+    {
+        return configuredDatabase;
+    }
+
+    var userInfo = databaseUri.UserInfo.Split(':', 2, StringSplitOptions.TrimEntries);
+    var builder = new NpgsqlConnectionStringBuilder
+    {
+        Host = databaseUri.Host,
+        Port = databaseUri.IsDefaultPort ? 5432 : databaseUri.Port,
+        Database = databaseUri.AbsolutePath.Trim('/'),
+        Username = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : string.Empty,
+        Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
+        SslMode = SslMode.Require
+    };
+
+    foreach (var segment in databaseUri.Query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries))
+    {
+        var parts = segment.Split('=', 2);
+        var key = Uri.UnescapeDataString(parts[0]);
+        var value = parts.Length > 1 ? Uri.UnescapeDataString(parts[1]) : string.Empty;
+
+        if (key.Equals("sslmode", StringComparison.OrdinalIgnoreCase) &&
+            Enum.TryParse<SslMode>(value, ignoreCase: true, out var sslMode))
+        {
+            builder.SslMode = sslMode;
+        }
+    }
+
+    return builder.ConnectionString;
+}
 
 record MessageCreateRequest(string GuestName, string Message, bool IsDeveloper);
 record MessageDeleteRequest(string Email);
