@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Digital Gift for Manoj Kumar & Hima Sree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <p class="tag">Gift Dedication</p>
+      <h1>A Digital Gift for Manoj Kumar &amp; Hima Sree</h1>
+      <p class="hero-sub">
+        Built with love for your new journey together.
+      </p>
+      <div class="countdown" id="countdown">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+      </div>
+      <p class="countdown-note">Counting down to April 23, 2026 at 10:30 AM IST.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="live-wall">
+      <div class="container">
+        <h2>The Live Celebration Wall</h2>
+        <p class="section-intro">Upload memories and post wishes during the celebration.</p>
+        <div class="grid two">
+          <div class="card">
+            <h3>Upload a Memory</h3>
+            <form id="memoryForm">
+              <input type="text" id="memoryGuestName" placeholder="Your name" required>
+              <input type="text" id="memoryCaption" placeholder="Caption (optional)">
+              <input type="file" id="memoryImage" accept=".jpg,.jpeg,.png,.webp" required>
+              <button type="submit">Upload a Memory</button>
+            </form>
+            <p class="form-status" id="memoryStatus"></p>
+          </div>
+          <div class="card">
+            <h3>Send a Live Wish</h3>
+            <form id="wishForm">
+              <input type="text" id="wishGuestName" placeholder="Your name" required>
+              <textarea id="wishMessage" placeholder="Write your blessing..." rows="4" required></textarea>
+              <label class="checkbox">
+                <input type="checkbox" id="isDeveloper">
+                Post as Author/Hemanth
+              </label>
+              <button type="submit">Post Wish</button>
+            </form>
+            <p class="form-status" id="wishStatus"></p>
+          </div>
+        </div>
+
+        <div class="grid two mt">
+          <div class="card">
+            <h3>Memory Gallery</h3>
+            <div id="memoryFeed" class="memory-feed"></div>
+          </div>
+          <div class="card">
+            <h3>Live Stream of Wishes</h3>
+            <div id="wishFeed" class="wish-feed"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="timeline">
+      <div class="container">
+        <h2>Journey to April 23rd</h2>
+        <div class="timeline">
+          <div class="node">
+            <h4>December 3, 2024</h4>
+            <p>The moment that changed everything — she said yes 💍</p>
+          </div>
+          <div class="node">
+            <h4>November 5, 2025</h4>
+            <p>Commitment grew stronger with family blessings.</p>
+          </div>
+          <div class="node">
+            <h4>March 21, 2026</h4>
+            <p>Engaged and Wedding celebrations began.</p>
+          </div>
+          <div class="node final">
+            <h4>April 23, 2026</h4>
+            <p>The Big Day - love made official</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="info">
+      <div class="container">
+        <h2>Wedding Info</h2>
+        <div class="grid three">
+          <div class="card">
+            <h3>The Schedule</h3>
+            <ul>
+                <li><strong>22 Apr, 7:30 PM:</strong> Wedding Reception</li>
+                <li><strong>23 Apr, 10:30 AM:</strong> Wedding Ceremony</li>
+                <li><strong>23 Apr, 12:00 PM:</strong> Wedding Lunch</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Location</h3>
+            <p>Tap below for directions to the venue:</p>
+            <p>GMR Convention Hall, Near T.V Tower, Kadiri Road, Anantapur</p>
+            <a class="map-link" target="_blank" rel="noreferrer" href="https://maps.google.com/?q=GMR+Convention+Hall,+Near+T.V+Tower,+Kadiri+Road,+Anantapur">
+              Open Google Map
+            </a>
+          </div>
+          <div class="card">
+            <h3>Digital Program</h3>
+            <ul>
+              <li>Groom: Manoj Kumar</li>
+              <li>Bride: Hima Sree</li>
+              <li>Host Developer: Hemanth</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Crafted with love by Hemanth for Manoj Kumar &amp; Hima Sree.</p>
+    </div>
+  </footer>
+
+  <script src="app.js?v=20260416-1"></script>
+</body>
+</html>
