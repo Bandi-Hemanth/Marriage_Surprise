@@ -3,16 +3,27 @@ using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 const string AdminDeleteEmail = "bandihemanth2602@gmail.com";
+var renderPort = Environment.GetEnvironmentVariable("PORT");
 
 builder.Services.AddOpenApi();
 var dbPath = builder.Environment.IsDevelopment()
     ? "wedding.db"
     : "/data/wedding.db";
 
+if (!builder.Environment.IsDevelopment())
+{
+    Directory.CreateDirectory("/data");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
 
 var app = builder.Build();
+
+if (!string.IsNullOrWhiteSpace(renderPort))
+{
+    app.Urls.Add($"http://0.0.0.0:{renderPort}");
+}
 
 if (app.Environment.IsDevelopment())
 {
