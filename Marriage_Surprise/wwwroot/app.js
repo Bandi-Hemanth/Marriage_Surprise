@@ -82,7 +82,7 @@ function renderWishes(items) {
     return `
       <article class="feed-item">
         <p><strong>${escapeHtml(w.guestName)}</strong>
-          ${w.isDeveloper ? '<span class="badge">Author/Hemanth</span>' : ""}
+          ${w.isDeveloper ? '<span class="badge">Admin</span>' : ""}
         </p>
         <p>${escapeHtml(w.message)}</p>
         <div class="wish-item-footer">

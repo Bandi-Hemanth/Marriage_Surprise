@@ -5,8 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 const string AdminDeleteEmail = "bandihemanth2602@gmail.com";
 
 builder.Services.AddOpenApi();
+var dbPath = builder.Environment.IsDevelopment()
+    ? "wedding.db"
+    : "/data/wedding.db";
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=wedding.db"));
+    options.UseSqlite($"Data Source={dbPath}"));
 
 var app = builder.Build();
 
