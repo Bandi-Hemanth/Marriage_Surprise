@@ -49,7 +49,32 @@ app.UseStaticFiles();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    if (db.Database.IsNpgsql())
+    {
+        db.Database.ExecuteSqlRaw("""
+            CREATE TABLE IF NOT EXISTS "LiveMessages" (
+                "Id" uuid NOT NULL PRIMARY KEY,
+                "GuestName" text NOT NULL,
+                "Message" text NOT NULL,
+                "IsDeveloper" boolean NOT NULL,
+                "CreatedAtUtc" timestamp with time zone NOT NULL
+            );
+            """);
+
+        db.Database.ExecuteSqlRaw("""
+            CREATE TABLE IF NOT EXISTS "MemoryPhotos" (
+                "Id" uuid NOT NULL PRIMARY KEY,
+                "GuestName" text NOT NULL,
+                "Caption" text NOT NULL,
+                "ImageBase64" text NOT NULL,
+                "CreatedAtUtc" timestamp with time zone NOT NULL
+            );
+            """);
+    }
+    else
+    {
+        db.Database.EnsureCreated();
+    }
 }
 
 app.MapGet("/api/live/messages", async (AppDbContext db) =>
